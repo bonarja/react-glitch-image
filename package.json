@@ -1,6 +1,6 @@
 {
   "name": "react-glitch-image",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "show images with glitch fx",
   "keywords": [
     "react",
@@ -10,7 +10,7 @@
     "GlitchImage"
   ],
   "main": "src/index.ts",
-  "types": "types/index.d.ts",
+  "types": "src/types/index.d.ts",
   "engines": {
     "node": ">=12"
   },
