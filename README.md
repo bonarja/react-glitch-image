@@ -22,7 +22,7 @@
 | inside             | false   | Defines if the effect is seen outside the container                 |
 | activeFxOnInterval | true    | Activate the glitch effect in the animationInterval                 |
 | activeFxOnHover    | true    | activate the glitch effect on hover                                 |
-| useCanvas          | true    | layers split by canvas, false to layers repeat by img position      |
+| useCanvas          | true    | layers real split by canvas, false to layers repeat by img position |
 | layerColors        | false   | alternate colors in layer 2, better explained below                 |
 | opacity            | 0.3     | layer 2 opacity                                                     |
 | filter             | true    | Activate aleatory hue-rotate filter value and brightness in layer 2 |
