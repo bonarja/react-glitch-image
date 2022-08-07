@@ -44,8 +44,8 @@ export const useSplitImage = (src: string, splitSize: number) => {
 
 
     useEffect(() => {
-        !pieces && init()
-    }, [])
+        init()
+    }, [src])
 
 
     return { pieces }

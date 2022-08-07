@@ -23,7 +23,7 @@ type GlitchImageInput = {
     activeFxOnInterval?: boolean,
     activeFxOnHover?: boolean
     useCanvas?: boolean,
-    layerColors?: Array<string>
+    layerColors?: Array<string> | boolean
     onActiveFx?: (time: number) => void
 }
 const GlitchImage = ({
@@ -32,7 +32,7 @@ const GlitchImage = ({
     splitSize = 8,
     animationInterval = 4000,
     animationDuration = 500,
-    variations = [1.8, 3],
+    variations = [3, 5],
     inside = false,
     opacity = 0.3,
     brightness = 2,
@@ -41,13 +41,26 @@ const GlitchImage = ({
     activeFxOnInterval = true,
     activeFxOnHover = true,
     useCanvas = true,
-    layerColors = ["rgba(255,0,0,0.07)", "rgba(0,0,255, 0.07)"],
+    layerColors = false,
     onActiveFx
 }: GlitchImageInput) => {
 
     const prom = 100 / splitSize;
     const ref = useRef<HTMLDivElement>(null)
     const { pieces } = useSplitImage(image, splitSize)
+
+    const getLayerColors = (index: number) => {
+        let layers: Array<string> = []
+
+        if (layerColors === true) {
+            layers = ["rgba(255,0,0,0.04)", "rgba(0,0,255, 0.04)"]
+        } else if (layerColors === false) {
+            layers = ["unset"]
+        } else {
+            layers = layerColors
+        }
+        return layers[index % layers.length]
+    }
 
 
     const getFilter = () => {
@@ -92,7 +105,7 @@ const GlitchImage = ({
     useEffect(() => {
         const imgs = ref.current?.querySelectorAll(".GlitchImageFilter canvas, .GlitchImageFilter img")
         imgs?.length && imgs.forEach((x) => (x as HTMLImageElement).style.filter =  getFilter())
-    }, [image])
+    }, [image, pieces])
 
 
     if (useCanvas) return (
@@ -102,7 +115,7 @@ const GlitchImage = ({
                 {pieces && (<>
                     {pieces.map((canvas,index) => <ImgGlitchBase key={index} prom={prom} index={index} opacity={1}>{canvas}</ImgGlitchBase>)}
                     {pieces.map((canvas,index) => <ImgGlitch key={index} className="GlitchImageFilter" prom={prom} index={index} opacity={opacity}>
-                        <div style={{backgroundColor: layerColors[index % layerColors.length] }}/>
+                        <div style={{backgroundColor: getLayerColors(index) }}/>
                         {canvas}
                     </ImgGlitch>)}
                 </>)}
@@ -120,7 +133,7 @@ const GlitchImage = ({
             ))}
             {Array(splitSize).fill(0).map((x, index) => (
                 <ImgGlitch className="GlitchImageFilter" key={index} prom={prom} index={index} opacity={opacity}>
-                    <div style={{backgroundColor: layerColors[index % layerColors.length] }} />
+                    <div style={{backgroundColor: getLayerColors(index) }} />
                     <img src={image} loading="lazy" />
                 </ImgGlitch>
             ))}

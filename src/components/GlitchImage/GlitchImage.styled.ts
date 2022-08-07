@@ -7,6 +7,9 @@ export const GlitchImageStyled = styled.div<{ width: number }>`
     img, canvas {
         width: 100%;
     }
+    canvas {
+        height: 100%;
+    }
 `
 
 
@@ -37,7 +40,6 @@ export const ImgGlitch = styled.div<{index: number, prom: number, opacity: numbe
         opacity: ${props => props.opacity};
     }
     canvas {
-        /* top: ${props => props.index * 100}%; */
         opacity: ${props => props.opacity};
     }
 `
@@ -45,7 +47,7 @@ export const ImgGlitch = styled.div<{index: number, prom: number, opacity: numbe
 export const ImgGlitchBase = styled(ImgGlitch)`
     animation-iteration-count: infinite;
     animation-fill-mode: forwards;
-    opacity: 1;
+    opacity: 0;
     animation-duration: 150ms;
     z-index: 0;
     img, canvas {
@@ -65,7 +67,6 @@ export const DivGlitchSection = styled.div<{ inside: boolean, variations: Array<
         overflow: hidden;
     `} 
     img, canvas {
-        width: 100%;
         position: absolute;
     }
     ${props => !props.activeFxOnHover && css`
@@ -81,6 +82,7 @@ export const DivGlitchSection = styled.div<{ inside: boolean, variations: Array<
             }
         }
         ${ImgGlitchBase} {
+            opacity: 1;
             animation-name: GlitchImageBase-glitch1;
             &:nth-child(odd) {
                 animation-name: GlitchImageBase-glitch2;
