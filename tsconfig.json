@@ -1,8 +1,7 @@
 {
    "extends": "@tsconfig/recommended/tsconfig.json",
    "compilerOptions": {
-      // "rootDir": "src/",
-      "baseUrl": "src/",
+      "rootDir": "src/",
       "outDir": "dist/",
       "jsx": "react",
       "module": "esnext",
@@ -10,10 +9,8 @@
       "moduleResolution": "node",
       "declaration": true,
       "sourceMap": true,
-      // "declarationDir": "dist/types",
       "declarationMap": true,
       "allowSyntheticDefaultImports": true,
-      // "emitDeclarationOnly": true,
    },
    "include": [ "src" ],
    "exclude": [ "node_modules", "tests" ]
