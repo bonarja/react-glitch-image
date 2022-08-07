@@ -1,6 +1,6 @@
 {
   "name": "react-glitch-image",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "show images with glitch fx",
   "keywords": [
     "react",
@@ -9,14 +9,12 @@
     "fx",
     "GlitchImage"
   ],
-  "main": "src/index.ts",
-  "types": "src/types/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "engines": {
     "node": ">=12"
   },
-  "files": [
-    "src/**/*"
-  ],
+  "files": ["dist"],
   "peerDependencies": {
     "react": ">=16",
     "styled-components": "^5.3.5"

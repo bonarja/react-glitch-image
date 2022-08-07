@@ -4,7 +4,7 @@ import styled, { css } from "styled-components";
 export const GlitchImageStyled = styled.div<{ width: number }>`
     width: ${props => props.width}rem;
     position: relative;
-    img {
+    img, canvas {
         width: 100%;
     }
 `
@@ -27,8 +27,17 @@ export const ImgGlitch = styled.div<{index: number, prom: number, opacity: numbe
     top:  ${props => props.prom * props.index}%;
     opacity: 0;
     z-index: 2;
+    div {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
     img {
         top: -${props => props.index * 100}%;
+        opacity: ${props => props.opacity};
+    }
+    canvas {
+        /* top: ${props => props.index * 100}%; */
         opacity: ${props => props.opacity};
     }
 `
@@ -39,7 +48,7 @@ export const ImgGlitchBase = styled(ImgGlitch)`
     opacity: 1;
     animation-duration: 150ms;
     z-index: 0;
-    img {
+    img, canvas {
         opacity: 1;
         transform: none;
         filter: unset !important;
@@ -55,7 +64,7 @@ export const DivGlitchSection = styled.div<{ inside: boolean, variations: Array<
     ${props => props.inside && css`
         overflow: hidden;
     `} 
-    img {
+    img, canvas {
         width: 100%;
         position: absolute;
     }
