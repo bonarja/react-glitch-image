@@ -1,8 +1,8 @@
 {
    "extends": "@tsconfig/recommended/tsconfig.json",
    "compilerOptions": {
-      "rootDir": "src/",
-      "outDir": "dist/",
+      "rootDir": "src",
+      "outDir": "dist",
       "jsx": "react",
       "module": "esnext",
       "lib": ["dom", "esnext"],
