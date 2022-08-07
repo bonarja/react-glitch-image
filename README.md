@@ -54,13 +54,7 @@ each layer generate a different random
 
 - This will create a sublayer of the color specified in layer 2, it is recommended to deactivate filter or use a customFilter to get a better and more personalized result.
 
-```javascript
-    <GlitchImage
-        image="image.jpg"
-        customFilter={"invert($20%) saturate($30%)"}
-        layerColors={true}
-    />
-```
+- EXAMPLE
 
 ```javascript
     <GlitchImage
@@ -69,3 +63,4 @@ each layer generate a different random
         layerColors={["rgba(0,0,180,0.05)", "rgba(200,0,0,0.05)"]}
     />
 ```
+![](doc/preview2.gif)
