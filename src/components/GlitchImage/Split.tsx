@@ -36,8 +36,8 @@ export const useSplitImage = (src: string, splitSize: number) => {
 
             setPieces(imagePieces)
         }
-        image.onerror = (err,b,c) => {
-            console.error("GlitchImage Error: ", err, b,c)
+        image.onerror = (err) => {
+            console.error("GlitchImage Error: ", err)
         }
         image.src = src
     }
@@ -45,7 +45,7 @@ export const useSplitImage = (src: string, splitSize: number) => {
 
     useEffect(() => {
         init()
-    }, [src])
+    }, [src, splitSize])
 
 
     return { pieces }
