@@ -1,8 +1,8 @@
 import styled, { css } from "styled-components";
 
 
-export const GlitchImageStyled = styled.div<{ width: number }>`
-    width: ${props => props.width}rem;
+export const GlitchImageStyled = styled.div<{ width: number | string }>`
+    width: ${props => typeof props.width === "number" ? `${props.width}rem` : props.width};
     position: relative;
     img, canvas {
         width: 100%;

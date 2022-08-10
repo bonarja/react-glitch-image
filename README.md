@@ -12,23 +12,31 @@
 
 ## Parameters to get complicated (props)!
 
-| name               | default | description                                                         |
-|--------------------|---------|---------------------------------------------------------------------|
-| width              | 20      | Width (used in the styled in rem)                                   |
-| splitSize          | 8       | Number of divisions                                                 |
-| animationInterval  | 4000    | Time interval to repeat animation (measured in ms)                  |
-| animationDuration  | 400     | I really have to describe this (measured in ms)                     |
-| variations         | [3, 5]  | Intensity of the effect of each layer                               |
-| inside             | false   | Defines if the effect is seen outside the container                 |
-| activeFxOnInterval | true    | Activate the glitch effect in the animationInterval                 |
-| activeFxOnHover    | true    | activate the glitch effect on hover                                 |
-| useCanvas          | true    | layers real split by canvas, false to layers repeat by img position |
-| layerColors        | false   | alternate colors in layer 2, better explained below                 |
-| opacity            | 0.3     | layer 2 opacity                                                     |
-| filter             | true    | Activate aleatory hue-rotate filter value and brightness in layer 2 |
-| brightness         | 2       | Brightness filter intensity                                         |
-| customFilter       | null    | Deactivate the previous filter for a more personalized filter       |
+| name               | default | description                                                                                                    |
+|--------------------|---------|----------------------------------------------------------------------------------------------------------------|
+| width              | 20      | If it is a number it will be used as rem, otherwise use string with unit type                                  |
+| splitSize          | 8       | Number of divisions                                                                                            |
+| animationInterval  | 4000    | Time interval to repeat animation (measured in ms)                                                             |
+| animationDuration  | 400     | I really have to describe this (measured in ms)                                                                |
+| variations         | [2, 3]  | Intensity of the effect of each layer                                                                          |
+| inside             | false   | Defines if the effect is seen outside the container                                                            |
+| activeFxOnInterval | true    | Activate the glitch effect in the animationInterval                                                            |
+| activeFxOnHover    | true    | Activate the glitch effect on hover                                                                            |
+| useCanvas          | true    | Layers real split by canvas, false to layers repeat by img position                                            |
+| layerColors        | false   | Alternate colors in layer 2, better explained below                                                            |
+| opacity            | 0.3     | Layer 2 opacity                                                                                                |
+| filter             | true    | Activate aleatory hue-rotate filter value and brightness in layer 2                                            |
+| brightness         | 2       | Brightness filter intensity                                                                                    |
+| customFilter       | null    | Deactivate the previous filter for a more personalized filter                                                  |
+| onActiveFx         | null    | This function is executed when the glitch effect is triggered by the interval, and sends the animationDuration |
 
+
+## width
+```javascript
+- <GlitchImage image="image.jpg" width={18}/> // =18rem
+- <GlitchImage image="image.jpg" width="50%"/> // =50%
+- <GlitchImage image="image.jpg" width="300px"/> // =300px
+```
 
 ## customFilter
 This property receives normal filters for css property, 
@@ -59,7 +67,7 @@ each layer generate a different random
 ```javascript
     <GlitchImage
         image="image.jpg"
-        customFilter={"invert($20%) saturate($30%)"}
+        customFilter="invert($20%) saturate($30%)"
         layerColors={["rgba(0,0,180,0.05)", "rgba(200,0,0,0.05)"]}
     />
 ```

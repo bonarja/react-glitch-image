@@ -10,7 +10,7 @@ import { useSplitImage } from "./Split"
 
 type GlitchImageInput = {
     image: string
-    width?: number
+    width?: number | string
     splitSize?: number
     animationInterval?: number
     animationDuration?: number
