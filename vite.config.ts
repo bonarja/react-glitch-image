@@ -11,16 +11,38 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
-      formats: ["es", "cjs"],
-      fileName: (format) => (format === "es" ? "index.mjs" : "index.js"),
+      name: pkg.name,
+      formats: ['es', 'umd'],
+      fileName: (format) => `index.${format}.js`,
     },
-    emptyOutDir: false,
+    emptyOutDir: true,
     rollupOptions: {
       external: [...Object.keys(pkg.peerDependencies), "react/jsx-runtime"],
+      // output: {
+      //   globals: {
+      //       react: 'React',
+      //       'react-dom': 'ReactDOM',
+      //       'styled-components': 'styled',
+      //   },
+      // },
     },
   },
   plugins: [
-    react(),
+    react({
+      babel: {
+        plugins: [
+          [
+            'babel-plugin-styled-components',
+            {
+              // ssr: true,
+              // pure: true,
+              displayName: true,
+              fileName: false
+            }
+          ]
+        ]
+      }
+    }),
     tsconfigPaths(),
     swc.vite(),
     swc.rollup({
