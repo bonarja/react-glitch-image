@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { 
     GlitchImageStyled,
     DivGlitchSection, 
@@ -84,22 +84,51 @@ const GlitchImage = ({
         return ""
     }
 
+    const setFiletersInLayers = () => {
+        const imgs = ref.current?.querySelectorAll(".GlitchImageFilter canvas, .GlitchImageFilter img")
+        imgs?.length && imgs.forEach((x) => (x as HTMLImageElement).style.filter =  getFilter())
+    }
+
+    const activeFx = () => {
+        setTimeout(() => {
+            ref.current?.classList.remove("GlitchImageActive")
+        }, animationDuration)
+
+        setFiletersInLayers()
+
+        onActiveFx && onActiveFx(animationDuration)
+        ref.current?.classList.add("GlitchImageActive")
+    }
+
     useEffect(() => {
-        if (activeFxOnInterval) {
-            const intervalTime = setInterval(() => {
-                setTimeout(() => {
-                    ref.current?.classList.remove("GlitchImageActive")
-                }, animationDuration)
+        var intervalTime: NodeJS.Timeout
 
-                const imgs = ref.current?.querySelectorAll(".GlitchImageFilter canvas, .GlitchImageFilter img")
-                imgs?.length && imgs.forEach((x) => (x as HTMLImageElement).style.filter =  getFilter())
-
-                onActiveFx && onActiveFx(animationDuration)
-                ref.current?.classList.add("GlitchImageActive")
-            }, animationInterval)
-            return () => clearInterval(intervalTime)
+        const resetTimeAndSetFx = () => {
+            if (activeFxOnInterval) {
+                clearInterval(intervalTime)
+                intervalTime = setInterval( activeFx, animationInterval)
+            }
         }
-    }, [activeFxOnInterval])
+        
+        if (activeFxOnHover) {
+            const el: HTMLDivElement | null = ref.current
+            if (el) {
+                el.onmouseenter = () => {
+                    clearInterval(intervalTime)
+                    setFiletersInLayers()
+                    el.classList.add("GlitchImageActive")
+                }
+                el.onmouseleave = () => {
+                    el.classList.remove("GlitchImageActive")
+                    resetTimeAndSetFx()
+                }
+            }
+        }
+
+        resetTimeAndSetFx()
+
+        return () => clearInterval(intervalTime)
+    }, [activeFxOnInterval, activeFxOnHover])
 
 
     useEffect(() => {
@@ -125,7 +154,12 @@ const GlitchImage = ({
     
     return (<GlitchImageStyled className="GlitchImage" width={width}>
         <img src={image} loading="lazy" />
-        <DivGlitchSection ref={ref} inside={inside} variations={variations} activeFxOnHover={activeFxOnHover}>
+        <DivGlitchSection
+            ref={ref} 
+            inside={inside}
+            variations={variations} 
+            activeFxOnHover={activeFxOnHover}
+        >
             {Array(splitSize).fill(0).map((x, index) => (
                 <ImgGlitchBase key={index} prom={prom} index={index} opacity={1}>
                     <img src={image} loading="lazy" />

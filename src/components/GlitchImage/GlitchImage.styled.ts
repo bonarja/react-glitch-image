@@ -72,7 +72,7 @@ export const DivGlitchSection = styled.div<{ inside: boolean, variations: Array<
     ${props => !props.activeFxOnHover && css`
         pointer-events: none;
     `};
-    &.GlitchImageActive, &:hover {
+    &.GlitchImageActive {
         ${ImgGlitch} {
             animation-name: GlitchImage-glitch1;
             z-index: ${props => props.inside ? 2 : 0};
