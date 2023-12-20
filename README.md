@@ -2,7 +2,15 @@
 
 ### Allows display images with a glitch effect
 
+```bash
+# NPM
+npm install --save react-glitch-image
+# YARN
+yarn add react-glitch-image
+```
+
 ```javascript
+    import { GlitchImage } from "react-glitch-image";
     <GlitchImage image="image.jpg"/>
 ```
 ## Very simple!
@@ -22,7 +30,7 @@
 | inside             | false   | Defines if the effect is seen outside the container                                                            |
 | activeFxOnInterval | true    | Activate the glitch effect in the animationInterval                                                            |
 | activeFxOnHover    | true    | Activate the glitch effect on hover                                                                            |
-| useCanvas          | true    | Layers real split by canvas, false to layers repeat by img position                                            |
+position                                            |
 | layerColors        | false   | Alternate colors in layer 2, better explained below                                                            |
 | opacity            | 0.3     | Layer 2 opacity                                                                                                |
 | filter             | true    | Activate aleatory hue-rotate filter value and brightness in layer 2                                            |
