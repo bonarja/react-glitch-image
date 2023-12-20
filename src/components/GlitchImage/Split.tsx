@@ -1,29 +1,11 @@
-import React, { ReactElement, useRef, useState } from "react"
+import React, { ReactElement, useCallback, useState } from "react"
 import { useEffect } from "react";
-
-
-type CanvasInput = {
-    image: HTMLImageElement
-    height: number
-    index: number
-}
-const Canvas = ({image, height, index}: CanvasInput) => {
-    const ref = useRef(null)
-    useEffect(() => {
-        if (ref.current) {
-            const canvas = ref.current as HTMLCanvasElement
-            const context = canvas.getContext('2d')
-            context?.drawImage(image, 0, index * height, image.width, height,  0, 0, image.width, height);
-        }
-    }, [ref])
-    return <canvas width={image.width} height={height} ref={ref}/>
-}
-
+import { Canvas } from "./Canvas";
 
 export const useSplitImage = (src: string, splitSize: number) => {
     const [ pieces, setPieces ] = useState<ReactElement<typeof Canvas>[] | null>(null)
 
-    const init = () => {
+    const init = useCallback( () => {
         const imagePieces: ReactElement<typeof Canvas>[] = [];
         const image = new Image()
 
@@ -40,12 +22,12 @@ export const useSplitImage = (src: string, splitSize: number) => {
             console.error("GlitchImage Error: ", err)
         }
         image.src = src
-    }
+    }, [src, splitSize])
 
 
     useEffect(() => {
         init()
-    }, [src, splitSize])
+    }, [src, splitSize, init])
 
 
     return { pieces }

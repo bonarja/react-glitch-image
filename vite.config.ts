@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import dts from "vite-plugin-dts";
@@ -12,19 +12,18 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
       name: pkg.name,
-      formats: ['es', 'umd'],
+      formats: ["es", "umd"],
       fileName: (format) => `index.${format}.js`,
     },
     emptyOutDir: true,
     rollupOptions: {
       external: [...Object.keys(pkg.peerDependencies), "react/jsx-runtime"],
-      // output: {
-      //   globals: {
-      //       react: 'React',
-      //       'react-dom': 'ReactDOM',
-      //       'styled-components': 'styled',
-      //   },
-      // },
+      output: {
+        globals: {
+          'react': 'React',
+          'styled-components': 'styled',
+        }
+      }
     },
   },
   plugins: [
@@ -32,22 +31,22 @@ export default defineConfig({
       babel: {
         plugins: [
           [
-            'babel-plugin-styled-components',
+            "babel-plugin-styled-components",
             {
               // ssr: true,
               // pure: true,
               displayName: true,
-              fileName: false
-            }
-          ]
-        ]
-      }
+              fileName: false,
+            },
+          ],
+        ],
+      },
     }),
     tsconfigPaths(),
     swc.vite(),
     swc.rollup({
       minify: true,
     }) as PluginOption,
-    dts({ insertTypesEntry: true }),
+    dts({ insertTypesEntry: true, include: ["src"] }),
   ],
 });

@@ -15,7 +15,7 @@ export const GlitchImageStyled = styled.div<{ width: number | string }>`
 
 
 
-export const ImgGlitch = styled.div<{index: number, prom: number, opacity: number }>`
+export const ImgGlitch = styled.div<{$index: number, $prom: number, $opacity: number }>`
     position: absolute;
     left: 0;
     width: 100%;
@@ -26,8 +26,8 @@ export const ImgGlitch = styled.div<{index: number, prom: number, opacity: numbe
     animation-iteration-count: infinite;
     animation-duration: 150ms;
     animation-fill-mode: forwards;
-    height:  ${props => props.prom}%;
-    top:  ${props => props.prom * props.index}%;
+    height:  ${props => props.$prom}%;
+    top:  ${props => props.$prom * props.$index}%;
     opacity: 0;
     z-index: 2;
     div {
@@ -36,11 +36,11 @@ export const ImgGlitch = styled.div<{index: number, prom: number, opacity: numbe
         position: absolute;
     }
     img {
-        top: -${props => props.index * 100}%;
-        opacity: ${props => props.opacity};
+        top: -${props => props.$index * 100}%;
+        opacity: ${props => props.$opacity};
     }
     canvas {
-        opacity: ${props => props.opacity};
+        opacity: ${props => props.$opacity};
     }
 `
 
@@ -57,25 +57,25 @@ export const ImgGlitchBase = styled(ImgGlitch)`
     }
 `
 
-export const DivGlitchSection = styled.div<{ inside: boolean, variations: Array<number>, activeFxOnHover: boolean}>`
+export const DivGlitchSection = styled.div<{ $inside: boolean, $variations: Array<number>, $activeFxOnHover: boolean}>`
     height: 100%;
     width: 100%;
     position: absolute;
     left: 0;
     top: 0;
-    ${props => props.inside && css`
+    ${props => props.$inside && css`
         overflow: hidden;
     `} 
     img, canvas {
         position: absolute;
     }
-    ${props => !props.activeFxOnHover && css`
+    ${props => !props.$activeFxOnHover && css`
         pointer-events: none;
     `};
     &.GlitchImageActive {
         ${ImgGlitch} {
             animation-name: GlitchImage-glitch1;
-            z-index: ${props => props.inside ? 2 : 0};
+            z-index: ${props => props.$inside ? 2 : 0};
             opacity: 1;
             &:nth-child(odd) {
                 animation-name: GlitchImage-glitch2;
@@ -92,23 +92,23 @@ export const DivGlitchSection = styled.div<{ inside: boolean, variations: Array<
    
 
     @keyframes GlitchImage-glitch1 {
-        ${props => props.variations && css`
+        ${props => props.$variations && css`
             0% { 
-                margin-left: ${1 * props.variations[0]}%;
-                margin-bottom: ${0.05 * props.variations[0]}%;
+                margin-left: ${1 * props.$variations[0]}%;
+                margin-bottom: ${0.05 * props.$variations[0]}%;
                 opacity: 1;
             }
             20% {
-                margin-left: ${-3 * props.variations[0]}%;
-                margin-bottom: ${-0.1 * props.variations[0]}%;
+                margin-left: ${-3 * props.$variations[0]}%;
+                margin-bottom: ${-0.1 * props.$variations[0]}%;
             }
             40% {
-                margin-left: ${3 * props.variations[0]}%;
-                margin-bottom: ${0.05 * props.variations[0]}%;
+                margin-left: ${3 * props.$variations[0]}%;
+                margin-bottom: ${0.05 * props.$variations[0]}%;
             }
             60% {
-                margin-left: ${-1 * props.variations[0]}%;
-                margin-bottom: ${0.1 * props.variations[0]}%;
+                margin-left: ${-1 * props.$variations[0]}%;
+                margin-bottom: ${0.1 * props.$variations[0]}%;
             }
             74% {
                 opacity: 1;
@@ -124,19 +124,19 @@ export const DivGlitchSection = styled.div<{ inside: boolean, variations: Array<
                 opacity: 1;
             }
             100% {
-                margin-left: ${0.35 * props.variations[0]}%;
-                margin-bottom: ${-0.05 * props.variations[0]}%;
+                margin-left: ${0.35 * props.$variations[0]}%;
+                margin-bottom: ${-0.05 * props.$variations[0]}%;
             }
         `}
     }
     @keyframes GlitchImage-glitch2 {
-        ${props => props.variations && css`
+        ${props => props.$variations && css`
             0% { 
-                margin-left: ${-3 * props.variations[0]}%;
+                margin-left: ${-3 * props.$variations[0]}%;
                 opacity: 1;
             }
             20% {
-                margin-left: ${2 * props.variations[0]}%;
+                margin-left: ${2 * props.$variations[0]}%;
             }
             34% {
                 opacity: 1;
@@ -151,59 +151,59 @@ export const DivGlitchSection = styled.div<{ inside: boolean, variations: Array<
                 opacity: 1;
             }
             60% {
-                margin-left: ${3 * props.variations[0]}%;
+                margin-left: ${3 * props.$variations[0]}%;
             }
             80% {
-                margin-left: ${-3 * props.variations[0]}%;
+                margin-left: ${-3 * props.$variations[0]}%;
             }
             100% {
-                margin-left: ${3.2 * props.variations[0]}%;
+                margin-left: ${3.2 * props.$variations[0]}%;
             }
         `}
     }
     @keyframes GlitchImageBase-glitch1 {
-        ${props => props.variations && css`
+        ${props => props.$variations && css`
             0% {
-                margin-left: ${0.5 * props.variations[1]}%;
+                margin-left: ${0.5 * props.$variations[1]}%;
             }
             20% {
-                margin-left: ${-1 * props.variations[1]}%;
+                margin-left: ${-1 * props.$variations[1]}%;
             }
             40% {
-                margin-left: ${1 * props.variations[1]}%;
+                margin-left: ${1 * props.$variations[1]}%;
             }
             60% {
-                margin-left: ${-1 * props.variations[1]}%;
+                margin-left: ${-1 * props.$variations[1]}%;
             }
             80% {
                 margin-left: 0;
             }
             100% {
-                margin-left: ${0.35 * props.variations[1]}%;
+                margin-left: ${0.35 * props.$variations[1]}%;
             }
         
         `}
      
     }
     @keyframes GlitchImageBase-glitch2 {
-        ${props => props.variations && css`
+        ${props => props.$variations && css`
             0% {
-                margin-left: ${-1 * props.variations[1]}%;
+                margin-left: ${-1 * props.$variations[1]}%;
             }
             20% {
-                margin-left: ${1 * props.variations[1]}%;
+                margin-left: ${1 * props.$variations[1]}%;
             }
             40% {
                 margin-left: 0;
             }
             60% {
-                margin-left: ${1 * props.variations[1]}%;
+                margin-left: ${1 * props.$variations[1]}%;
             }
             80% {
-                margin-left: ${-1 * props.variations[1]}%;
+                margin-left: ${-1 * props.$variations[1]}%;
             }
             100% {
-                margin-left: ${0.5 * props.variations[1]}%;
+                margin-left: ${0.5 * props.$variations[1]}%;
             }
         `}   
     }
