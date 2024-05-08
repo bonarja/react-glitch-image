@@ -4,16 +4,21 @@ import React, {
   useEffect,
   useMemo,
   useRef,
+  useState,
 } from "react";
-import {
-  GlitchImageStyled,
-  DivGlitchSection,
-  ImgGlitch,
-  ImgGlitchBase,
-} from "./GlitchImage.styled";
+import { assignInlineVars } from "@vanilla-extract/dynamic";
 import { useSplitImage } from "./Split";
+import {
+  imgGlitchStyle,
+  divGlitchSectionStyle,
+  styleConfig,
+  wrapperStyle,
+  imgGlitchBaseStyle,
+  activeGlitchFxStyle,
+} from "./styles.css";
+import { variation1, variation2 } from "./keyframes.css";
 
-type GlitchImageInput = {
+type GlitchImageProps = {
   image: string;
   width?: number | string;
   splitSize?: number;
@@ -28,6 +33,7 @@ type GlitchImageInput = {
   activeFxOnInterval?: boolean;
   activeFxOnHover?: boolean;
   layerColors?: Array<string> | boolean;
+  baseImageCssOnActiveFx?: React.CSSProperties;
   onActiveFx?: (time: number) => void;
 };
 const GlitchImage = ({
@@ -46,10 +52,12 @@ const GlitchImage = ({
   activeFxOnHover = true,
   layerColors = false,
   onActiveFx,
-}: GlitchImageInput): ReactElement => {
+  baseImageCssOnActiveFx,
+}: GlitchImageProps): ReactElement => {
   const prom = useMemo(() => 100 / splitSize, [splitSize]);
   const ref = useRef<HTMLDivElement>(null);
   const { pieces } = useSplitImage(image, splitSize);
+  const [isActive, setIsActive] = useState(false);
 
   const getLayerColors = useCallback(
     (index: number) => {
@@ -103,13 +111,15 @@ const GlitchImage = ({
 
   const activeFx = useCallback(() => {
     setTimeout(() => {
-      ref.current?.classList.remove("GlitchImageActive");
+      ref.current?.classList.remove(activeGlitchFxStyle);
+      setIsActive(false);
     }, animationDuration);
 
     setFiletersInLayers();
 
     onActiveFx && onActiveFx(animationDuration);
-    ref.current?.classList.add("GlitchImageActive");
+    ref.current?.classList.add(activeGlitchFxStyle);
+    setIsActive(true);
   }, [animationDuration, onActiveFx, setFiletersInLayers]);
 
   useEffect(() => {
@@ -128,10 +138,10 @@ const GlitchImage = ({
         el.onmouseenter = () => {
           clearInterval(intervalTime);
           setFiletersInLayers();
-          el.classList.add("GlitchImageActive");
+          el.classList.add(activeGlitchFxStyle);
         };
         el.onmouseleave = () => {
-          el.classList.remove("GlitchImageActive");
+          el.classList.remove(activeGlitchFxStyle);
           resetTimeAndSetFx();
         };
       }
@@ -156,43 +166,68 @@ const GlitchImage = ({
       imgs.forEach((x) => ((x as HTMLImageElement).style.filter = getFilter()));
   }, [getFilter, image]);
 
+  const baseImageStyle = useMemo<React.CSSProperties>(
+    () => ({
+      ...((isActive && baseImageCssOnActiveFx) || {}),
+    }),
+    [isActive, baseImageCssOnActiveFx]
+  );
+
   return (
-    <GlitchImageStyled className="GlitchImage" width={width}>
-      <img src={image} loading="lazy" />
-      <DivGlitchSection
+    <div
+      className={wrapperStyle}
+      style={assignInlineVars({
+        [styleConfig.width]: typeof width === "number" ? `${width}rem` : width,
+      })}
+    >
+      <img src={image} loading="lazy" style={baseImageStyle} />
+      <div
+        className={divGlitchSectionStyle}
+        style={assignInlineVars({
+          [styleConfig.inside]: inside ? "true" : "false",
+          [styleConfig.activeFxOnHover]: activeFxOnHover ? "true" : "false",
+          [variation1]: variations[0] + "%",
+          [variation2]: variations[1] + "%"
+        })}
         ref={ref}
-        $inside={inside}
-        $variations={variations}
-        $activeFxOnHover={activeFxOnHover}
       >
         {pieces && (
           <>
             {pieces.map((canvas, index) => (
-              <ImgGlitchBase
+              <div
+                className={imgGlitchBaseStyle}
+                style={{
+                  height: prom + "%",
+                  top: prom * index + "%",
+                  ...assignInlineVars({
+                    [styleConfig.opacity]: String(opacity),
+                  }),
+                }}
                 key={index}
-                $prom={prom}
-                $index={index}
-                $opacity={1}
               >
                 {canvas}
-              </ImgGlitchBase>
+              </div>
             ))}
             {pieces.map((canvas, index) => (
-              <ImgGlitch
+              <div
                 key={index}
-                className="GlitchImageFilter"
-                $prom={prom}
-                $index={index}
-                $opacity={opacity}
+                className={imgGlitchStyle}
+                style={{
+                  height: prom + "%",
+                  top: prom * index + "%",
+                  ...assignInlineVars({
+                    [styleConfig.opacity]: String(opacity),
+                  }),
+                }}
               >
                 <div style={{ backgroundColor: getLayerColors(index) }} />
                 {canvas}
-              </ImgGlitch>
+              </div>
             ))}
           </>
         )}
-      </DivGlitchSection>
-    </GlitchImageStyled>
+      </div>
+    </div>
   );
 };
 

@@ -4,6 +4,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import dts from "vite-plugin-dts";
 import swc from "unplugin-swc";
 import { defineConfig, PluginOption } from "vite";
+import { vanillaExtractPlugin } from '@vanilla-extract/rollup-plugin';
 
 import pkg from "./package.json";
 
@@ -20,28 +21,14 @@ export default defineConfig({
       external: [...Object.keys(pkg.peerDependencies), "react/jsx-runtime"],
       output: {
         globals: {
-          'react': 'React',
-          'styled-components': 'styled',
+          'react': 'React'
         }
       }
     },
   },
   plugins: [
-    react({
-      babel: {
-        plugins: [
-          [
-            "babel-plugin-styled-components",
-            {
-              // ssr: true,
-              // pure: true,
-              displayName: true,
-              fileName: false,
-            },
-          ],
-        ],
-      },
-    }),
+    vanillaExtractPlugin(),
+    react(),
     tsconfigPaths(),
     swc.vite(),
     swc.rollup({
