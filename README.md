@@ -37,6 +37,7 @@ position                                            |
 | brightness         | 2       | Brightness filter intensity                                                                                    |
 | customFilter       | null    | Deactivate the previous filter for a more personalized filter                                                  |
 | onActiveFx         | null    | This function is executed when the glitch effect is triggered by the interval, and sends the animationDuration |
+| baseImageStyleOnActiveFx | null | Apply css style on the base image when fx glitch is activated |
 
 
 ## width

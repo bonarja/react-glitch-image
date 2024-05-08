@@ -33,7 +33,7 @@ type GlitchImageProps = {
   activeFxOnInterval?: boolean;
   activeFxOnHover?: boolean;
   layerColors?: Array<string> | boolean;
-  baseImageCssOnActiveFx?: React.CSSProperties;
+  baseImageStyleOnActiveFx?: React.CSSProperties;
   onActiveFx?: (time: number) => void;
 };
 const GlitchImage = ({
@@ -52,12 +52,14 @@ const GlitchImage = ({
   activeFxOnHover = true,
   layerColors = false,
   onActiveFx,
-  baseImageCssOnActiveFx,
+  baseImageStyleOnActiveFx,
 }: GlitchImageProps): ReactElement => {
   const prom = useMemo(() => 100 / splitSize, [splitSize]);
   const ref = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
   const { pieces } = useSplitImage(image, splitSize);
-  const [isActive, setIsActive] = useState(false);
+  const [currentBaseImageStyle, setCurrentBaseImageStyle] =
+    useState<React.CSSProperties>({});
 
   const getLayerColors = useCallback(
     (index: number) => {
@@ -103,7 +105,7 @@ const GlitchImage = ({
 
   const setFiletersInLayers = useCallback(() => {
     const imgs = ref.current?.querySelectorAll(
-      ".GlitchImageFilter canvas, .GlitchImageFilter img"
+      `.${imgGlitchStyle}[data-glitch] canvas`
     );
     imgs?.length &&
       imgs.forEach((x) => ((x as HTMLImageElement).style.filter = getFilter()));
@@ -112,15 +114,21 @@ const GlitchImage = ({
   const activeFx = useCallback(() => {
     setTimeout(() => {
       ref.current?.classList.remove(activeGlitchFxStyle);
-      setIsActive(false);
+      baseImageStyleOnActiveFx && setCurrentBaseImageStyle({});
     }, animationDuration);
 
     setFiletersInLayers();
 
     onActiveFx && onActiveFx(animationDuration);
     ref.current?.classList.add(activeGlitchFxStyle);
-    setIsActive(true);
-  }, [animationDuration, onActiveFx, setFiletersInLayers]);
+    baseImageStyleOnActiveFx &&
+      setCurrentBaseImageStyle(baseImageStyleOnActiveFx);
+  }, [
+    animationDuration,
+    baseImageStyleOnActiveFx,
+    onActiveFx,
+    setFiletersInLayers,
+  ]);
 
   useEffect(() => {
     let intervalTime: number;
@@ -138,10 +146,13 @@ const GlitchImage = ({
         el.onmouseenter = () => {
           clearInterval(intervalTime);
           setFiletersInLayers();
+          baseImageStyleOnActiveFx &&
+            setCurrentBaseImageStyle(baseImageStyleOnActiveFx);
           el.classList.add(activeGlitchFxStyle);
         };
         el.onmouseleave = () => {
           el.classList.remove(activeGlitchFxStyle);
+          baseImageStyleOnActiveFx && setCurrentBaseImageStyle({});
           resetTimeAndSetFx();
         };
       }
@@ -156,22 +167,16 @@ const GlitchImage = ({
     activeFx,
     animationInterval,
     setFiletersInLayers,
+    baseImageStyleOnActiveFx,
   ]);
 
   useEffect(() => {
     const imgs = ref.current?.querySelectorAll(
-      ".GlitchImageFilter canvas, .GlitchImageFilter img"
+      `.${imgGlitchStyle}[data-glitch] canvas`
     );
     imgs?.length &&
       imgs.forEach((x) => ((x as HTMLImageElement).style.filter = getFilter()));
   }, [getFilter, image]);
-
-  const baseImageStyle = useMemo<React.CSSProperties>(
-    () => ({
-      ...((isActive && baseImageCssOnActiveFx) || {}),
-    }),
-    [isActive, baseImageCssOnActiveFx]
-  );
 
   return (
     <div
@@ -180,14 +185,19 @@ const GlitchImage = ({
         [styleConfig.width]: typeof width === "number" ? `${width}rem` : width,
       })}
     >
-      <img src={image} loading="lazy" style={baseImageStyle} />
+      <img
+        src={image}
+        ref={imgRef}
+        loading="lazy"
+        style={currentBaseImageStyle}
+      />
       <div
         className={divGlitchSectionStyle}
         style={assignInlineVars({
           [styleConfig.inside]: inside ? "true" : "false",
           [styleConfig.activeFxOnHover]: activeFxOnHover ? "true" : "false",
           [variation1]: variations[0] + "%",
-          [variation2]: variations[1] + "%"
+          [variation2]: variations[1] + "%",
         })}
         ref={ref}
       >
@@ -212,6 +222,7 @@ const GlitchImage = ({
               <div
                 key={index}
                 className={imgGlitchStyle}
+                data-glitch
                 style={{
                   height: prom + "%",
                   top: prom * index + "%",
